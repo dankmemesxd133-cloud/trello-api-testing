@@ -22,7 +22,9 @@ jobs:
         uses: actions/setup-node@v6
 
       - name: Setup newman + html reporter
-        run: $ npm install -g newman && $ npm install -s newman-reporter-htmlextra
+        run: |
+            $ npm install -g newman
+            $ npm install -s newman-reporter-htmlextra
         
       - name: Get report
         run: $ newman run Trello.postman_collection.json --environment Trello Environment.postman_environment.json -r htmlextra --reporter-htmlextra-export "report.html"
