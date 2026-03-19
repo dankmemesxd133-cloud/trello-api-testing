@@ -20,11 +20,18 @@ jobs:
 
       - name: Setup node.js
         uses: actions/setup-node@v6
-
+        
       - name: Setup newman + html reporter
         run: |
             npm install -g newman
             npm install -g newman-reporter-htmlextra
         
-      - name: Get report
-        run: 'newman run Trello.postman_collection.json --environment Trello_Environment.postman_environment.json -r cli,htmlextra --reporter-htmlextra-export report.html'
+      - name: Run tests and get report
+        run: 'newman run Trello.postman_collection.json --environment Trello_Environment.postman_environment.json -r cli,htmlextra --reporter-htmlextra-export report.html' 
+      
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: report
+          path: "*.html"
