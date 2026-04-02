@@ -10,12 +10,8 @@ on:
 jobs:
   
   build:
-  
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
     
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
 
     steps:
       
@@ -41,3 +37,23 @@ jobs:
         with:
           name: report
           path: "*.html"
+      
+      - name: Send mail
+        uses: dawidd6/action-send-mail@d38f3f7
+        with:
+          # Required mail server address if not connection_url:
+          server_address: smtp.mail.ru
+          # Server port, default 25:
+          server_port: 465
+          # Required sender
+          from: 'metalnikov.pavel@mail.ru'
+          to: metalnikov.pavel@mail.ru
+          # Required mail subject:
+          subject: Github Actions job result
+          # Optional (recommended) mail server username:
+          username: ${{secrets.MAIL_USERNAME}}
+          # Optional (recommended) mail server password:
+          password: ${{secrets.MAIL_PASSWORD}}
+          # Optional attachments:
+          attachments: report.html
+          body: Postman collection report attached - ${{github.repository}}
