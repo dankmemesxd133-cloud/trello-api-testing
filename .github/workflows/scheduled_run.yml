@@ -39,7 +39,7 @@ jobs:
           path: "*.html"
       
       - name: Send mail
-        uses: dawidd6/action-send-mail@d38f3f7
+        uses: dawidd6/action-send-mail@v16
         with:
           # Required mail server address if not connection_url:
           server_address: smtp.mail.ru
