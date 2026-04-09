@@ -62,7 +62,7 @@ jobs:
       - name: Send report to Telegram
         uses: BorisTestov/tg_sender_action@latest
         env:
-          TG_SENDER_TG_CHAT_ID: ${{ secrets.TG_SENDER_TG_CHAT_ID }}
+          TG_SENDER_TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
           TG_SENDER_TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
           TG_SENDER_PAYLOAD_FILE_PATH: report.html
           TG_SENDER_PAYLOAD_MESSAGE: "Postman collection report attached"
