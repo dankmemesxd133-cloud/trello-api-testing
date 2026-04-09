@@ -4,6 +4,14 @@ name: CI
 
 on:
   workflow_dispatch:
+    inputs:
+        environment:
+        os_pick:
+            type: choice
+            description: "OS"
+            options: 
+              - ubuntu-latest
+              - windows-latest
   schedule:
     - cron: "30 15 * * 1-5"
     - cron: "30 05 * * 0,6"
