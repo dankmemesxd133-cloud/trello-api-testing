@@ -6,12 +6,21 @@ on:
   workflow_dispatch:
     inputs:
         environment:
+            required: true
+            type: choice
+            description: "Choose environment for run"
+            default: 'Test'
+            options: 
+              - Test
+              - Prod
         os_pick:
             type: choice
-            description: "OS"
+            description: "Choose OS for run"
+            default: 'ubuntu-latest'
             options: 
               - ubuntu-latest
               - windows-latest
+              - macos-latest
   schedule:
     - cron: "30 15 * * 1-5"
     - cron: "30 05 * * 0,6"
