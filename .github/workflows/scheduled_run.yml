@@ -30,7 +30,11 @@ jobs:
         env:
           trello_key: ${{ secrets.TRELLO_KEY }}
           trello_token: ${{ secrets.TRELLO_TOKEN }}
-        run: 'newman run Trello.postman_collection.json --environment Trello_Environment.postman_environment.json --env-var "key=$trello_key" --env-var "token=$trello_token" -r cli,htmlextra --reporter-htmlextra-export report.html' 
+        run: |
+            'newman run Trello.postman_collection.json --environment Trello_Environment.postman_environment.json \
+            --env-var "key=$trello_key" \
+            --env-var "token=$trello_token" \
+            -r cli,htmlextra --reporter-htmlextra-export report.html' 
       
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v4
@@ -47,7 +51,7 @@ jobs:
           # Server port, default 25:
           server_port: 465
           # Required sender
-          from: 'metalnikov.pavel@mail.ru'
+          from: 'metalnikov.pavel@mail.ru' #сделать адрес в секреты
           to: metalnikov.pavel@mail.ru
           # Required mail subject:
           subject: Github Actions job result
@@ -58,3 +62,11 @@ jobs:
           # Optional attachments:
           attachments: report.html
           body: Postman collection report attached - ${{github.repository}}
+          
+      - name: Send report to Telegram
+        uses: BorisTestov/tg_sender_action@latest
+        env:
+          TG_SENDER_TG_CHAT_ID: ${{ secrets.TG_SENDER_TG_CHAT_ID }}
+          TG_SENDER_TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
+          TG_SENDER_PAYLOAD_FILE_PATH: report.html
+          TG_SENDER_PAYLOAD_MESSAGE: "Postman collection report attached"
