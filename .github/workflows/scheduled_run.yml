@@ -35,7 +35,6 @@ jobs:
       
       - name: Get Postman files
         uses: actions/checkout@v6
-        run: cat ${{ inputs.environment }}
 
       - name: Setup node.js
         uses: actions/setup-node@v6
