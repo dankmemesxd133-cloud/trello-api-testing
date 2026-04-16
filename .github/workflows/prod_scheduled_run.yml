@@ -12,7 +12,7 @@ on:
             default: 'Test'
             options: 
               - Test
-              - prod_scheduled_run.yml
+              - Prod
         os_pick:
             type: choice
             description: "Choose OS for run"
@@ -35,7 +35,6 @@ jobs:
       
       - name: Get Postman files
         uses: actions/checkout@v6
-        run: cat ${{ inputs.environment }}
 
       - name: Setup node.js
         uses: actions/setup-node@v6
