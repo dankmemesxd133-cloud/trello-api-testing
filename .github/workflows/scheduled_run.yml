@@ -33,7 +33,7 @@ jobs:
     
     env:
       POSTMAN_ENV_FILE: ${{ inputs.environment == 'Prod' && 'Prod_Environment.postman_environment.json' || 'Test_Environment.postman_environment.json' }}
-      shell_env: ${{ inputs.os_pick == 'Windows' && 'cmd' || 'bash' }}
+      # shell_env: ${{ inputs.os_pick == 'Windows' && 'cmd' || 'bash' }}
 
     steps:
       
@@ -41,7 +41,7 @@ jobs:
         uses: actions/checkout@v6
       
       - name: Use selected environment file
-        shell: ${{ env.shell_env }}
+        shell: ${{ runner.os == 'Windows' && 'cmd' || 'bash' }}
         run: echo "Environment selected -> ${{ env.POSTMAN_ENV_FILE }} on ${{ runner.os }}"
 
       - name: Setup node.js
