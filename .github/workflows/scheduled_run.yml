@@ -56,14 +56,7 @@ jobs:
         env:
           trello_key: ${{ secrets.TRELLO_KEY }}
           trello_token: ${{ secrets.TRELLO_TOKEN }}
-        # run: 'newman run Trello.postman_collection.json --environment ${{ env.POSTMAN_ENV_FILE }} --env-var "key=$trello_key" --env-var "token=$trello_token" -r cli,htmlextra --reporter-htmlextra-export report.html' 
-        run: >
-          newman run Trello.postman_collection.json 
-          --environment "${{ env.POSTMAN_ENV_FILE }}" 
-          --env-var "key=$trello_key" 
-          --env-var "token=$trello_token" 
-          -r cli,htmlextra 
-          --reporter-htmlextra-export report.html
+        run: 'newman run Trello.postman_collection.json --environment ${{ env.POSTMAN_ENV_FILE }} --env-var "key=$trello_key" --env-var "token=$trello_token" -r cli,htmlextra --reporter-htmlextra-export report.html' 
       
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v4
