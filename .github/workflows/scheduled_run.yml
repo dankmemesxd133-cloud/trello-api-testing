@@ -33,8 +33,6 @@ jobs:
     
     env:
       POSTMAN_ENV_FILE: ${{ inputs.environment == 'Prod' && 'Prod_Environment.postman_environment.json' || 'Test_Environment.postman_environment.json' }}
-    
-    env:
       shell_env: ${{ inputs.os_pick == 'Windows' && 'cmd' || 'bash' }}
 
     steps:
