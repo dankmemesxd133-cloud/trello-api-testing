@@ -43,7 +43,7 @@ jobs:
         uses: actions/checkout@v6
       
       - name: Use selected environment file
-        shell: ${{ shell_env }}
+        shell: ${{ env.shell_env }}
         run: echo "Environment selected -> ${{ env.POSTMAN_ENV_FILE }} on ${{ runner.os }}"
 
       - name: Setup node.js
