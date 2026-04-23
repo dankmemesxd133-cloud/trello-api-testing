@@ -1,4 +1,3 @@
-# This is a basic workflow to help you get started with Actions
 
 name: CI
 
@@ -12,15 +11,16 @@ on:
             default: 'Test'
             options: 
               - Test
-              - prod_scheduled_run.yml
+              - Prod
         os_pick:
+            required: true
             type: choice
             description: "Choose OS for run"
             default: 'ubuntu-latest'
             options: 
-              - ubuntu-latest
-              - windows-latest
-              - macos-latest
+              - Ubuntu
+              - Windows
+              # - macos
               
   schedule:
     - cron: "30 15 * * 1-5"
@@ -29,12 +29,18 @@ jobs:
   
   build:
     
-    runs-on: ubuntu-latest
+    runs-on: ${{ inputs.os_pick == 'Windows' && 'windows-latest' || 'ubuntu-latest' }}
+    
+    env:
+      POSTMAN_ENV_FILE: ${{ inputs.environment == 'Prod' && 'Prod_Environment.postman_environment.json' || 'Test_Environment.postman_environment.json' }}
 
     steps:
       
       - name: Get Postman files
         uses: actions/checkout@v6
+      
+      - name: Use selected environment file
+        run: echo "Environment selected -> ${{ env.POSTMAN_ENV_FILE }} on ${{ runner.os }}"
 
       - name: Setup node.js
         uses: actions/setup-node@v6
@@ -48,7 +54,14 @@ jobs:
         env:
           trello_key: ${{ secrets.TRELLO_KEY }}
           trello_token: ${{ secrets.TRELLO_TOKEN }}
-        run: 'newman run Trello.postman_collection.json --environment Trello_Environment.postman_environment.json --env-var "key=$trello_key" --env-var "token=$trello_token" -r cli,htmlextra --reporter-htmlextra-export report.html' 
+        # run: 'newman run Trello.postman_collection.json --environment ${{ env.POSTMAN_ENV_FILE }} --env-var "key=$trello_key" --env-var "token=$trello_token" -r cli,htmlextra --reporter-htmlextra-export report.html' 
+        run: >
+          newman run Trello.postman_collection.json 
+          --environment "${{ env.POSTMAN_ENV_FILE }}" 
+          --env-var "key=$trello_key" 
+          --env-var "token=$trello_token" 
+          -r cli,htmlextra 
+          --reporter-htmlextra-export report.html
       
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v4
@@ -60,20 +73,13 @@ jobs:
       - name: Send mail
         uses: dawidd6/action-send-mail@v16
         with:
-          # Required mail server address if not connection_url:
           server_address: smtp.mail.ru
-          # Server port, default 25:
           server_port: 465
-          # Required sender
-          from: '${{secrets.EMAIL_SENDER}}' #сделать адрес в секреты
+          from: '${{secrets.EMAIL_SENDER}}' 
           to: ${{secrets.EMAIL_SENDER}}
-          # Required mail subject:
           subject: Github Actions job result
-          # Optional (recommended) mail server username:
           username: ${{secrets.MAIL_USERNAME}}
-          # Optional (recommended) mail server password:
           password: ${{secrets.MAIL_PASSWORD}}
-          # Optional attachments:
           attachments: report.html
           body: Postman collection report attached - ${{github.repository}}
           
