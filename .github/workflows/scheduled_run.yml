@@ -40,6 +40,7 @@ jobs:
         uses: actions/checkout@v6
       
       - name: Use selected environment file
+        shell: ${{ inputs.os_pick == 'Windows' && 'cmd' || 'bash' }}
         run: echo "Environment selected -> ${{ env.POSTMAN_ENV_FILE }} on ${{ runner.os }}"
 
       - name: Setup node.js
